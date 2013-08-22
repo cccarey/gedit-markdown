@@ -1,25 +1,25 @@
 #!/bin/bash
 
-# Le fichier gedit-markdown.sh fait partie de gedit-markdown.
+# The gedit-markdown.sh file is part of gedit-markdown.
 # Auteur: Jean-Philippe Fleury <contact@jpfleury.net>
 # Copyright © Jean-Philippe Fleury, 2009.
 # Copyright © Frédéric Bertolus, 2010.
 
-# Ce programme est un logiciel libre; vous pouvez le redistribuer ou le
-# modifier suivant les termes de la GNU General Public License telle que
-# publiée par la Free Software Foundation: soit la version 3 de cette
-# licence, soit (à votre gré) toute version ultérieure.
+# This program is free software: you can redistribute it or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
 
-# Ce programme est distribué dans l'espoir qu'il vous sera utile, mais SANS
-# AUCUNE GARANTIE: sans même la garantie implicite de COMMERCIALISABILITÉ
-# ni d'ADÉQUATION À UN OBJECTIF PARTICULIER. Consultez la Licence publique
-# générale GNU pour plus de détails.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See Public License
+# GNU General for more details.
 
-# Vous devriez avoir reçu une copie de la Licence publique générale GNU avec
-# ce programme; si ce n'est pas le cas, consultez
+# You should have received a copy of the GNU General Public License along with
+# this program if it is not the case, see
 # <http://www.gnu.org/licenses/>.
 
-# Localisation
+# Localization
 export TEXTDOMAINDIR=`dirname "$0"`/locale
 export TEXTDOMAIN=gedit-markdown
 . gettext.sh
@@ -37,51 +37,48 @@ ficSupp=( "${ficPrecompil[@]}" "$rep_language_specs/markdown.lang" "$rep_mime_pa
 redemarrer_nautilus ()
 {
 	echo -en $(gettext ""\
-"Nautilus doit être redémarré pour que les modifications apportées à la base\n"\
-"de données des types MIME soient prises en compte. NOTE: les fenêtres ou\n"\
-"onglets de Nautilus déjà ouverts seront perdus.\n"\
+"Nautilus must be restarted for the changes to the base\n"\
+"data MIME types are taken into account. NOTE: windows\n"\
+"Nautilus already open tabs will be lost.\n"\
 "\n"\
-"\t1 Redémarrer Nautilus maintenant.\n"\
-"\t2 Ne pas redémarrer Nautilus maintenant et attendre le prochain\n"\
-"\tredémarrage de la session ou de l'ordinateur.\n"\
+"\t1 Restart Nautilus now.\n"\
+"\t2 Do not restart Nautilus now. Wait for next session or computer restart\n"\
 "\n"\
-"Saisissez votre choix [1/2] (2 par défaut):")
+"Enter your choice [1/2] (2 default):")
 	echo -n " "
 	read choix
 	
 	echo ""
 	if [[ $choix == 1 ]]; then
-		echo $(gettext "Redémarrage de Nautilus")
+		echo $(gettext "Restart Nautilus")
 		killall nautilus
 		nautilus &> /tmp/gedit-markdown_redemarrer_nautilus.log &
 		sleep 4
 	
 	else
-		echo -e $(gettext "Nautilus ne sera pas redémarré maintenant (ceci ne vous\n"\
-"empêche pas d'utiliser déjà Markdown dans gedit s'il s'agit d'une\n"\
-"installation de gedit-markdown).")
+		echo -e $(gettext "Nautilus will not be restarted now ")
 	fi
 }
 
 cd `dirname "$0"`
 
-if [[ $1 == "installer" ]]; then
+if [[ $1 == "install" ]]; then
 	echo -en "\033[1m"
 	echo -en "#########################\n##\n## "
-	echo $(gettext "Installation de gedit-markdown")
+	echo $(gettext "Installation of gedit-markdown")
 	echo -e "##\n#########################\n"
-	echo -n $(gettext "Étape 1")
+	echo -n $(gettext "Step 1")
 	echo -n ": "
-	echo $(gettext "Copie des fichiers")
+	echo $(gettext "Copy files")
 	echo -en "\033[22m"
 	
-	# Création des répertoires s'ils n'existent pas déjà
+	# Create directories if they do not already exist
 	mkdir -p $rep_language_specs
 	mkdir -p $rep_mime_packages
 	mkdir -p $rep_plugins
 	mkdir -p $rep_snippets
 	
-	# Suppression des fichiers python précompilés
+	# Removing precompiled python files
 	for i in "${ficPrecompil[@]}"; do
 		if [ -f $i ]; then
 			rm $i
@@ -103,30 +100,30 @@ if [[ $1 == "installer" ]]; then
 	
 	echo -en "\033[1m"
 	echo ""
-	echo -n $(gettext "Étape 2")
+	echo -n $(gettext "Step 2")
 	echo -n ": "
-	echo $(gettext "Mise à jour de la base de données MIME")
+	echo $(gettext "Update the MIME database")
 	echo -en "\033[22m"
-	# Mise à jour de la base de données MIME
+	# Update the MIME database
 	update-mime-database $rep_mime
 	redemarrer_nautilus
 	
 	echo -en "\033[1m"
 	echo ""
-	echo $(gettext "Installation terminée. Veuillez redémarrer gedit s'il est ouvert.")
+	echo $(gettext "Installation is complete. Please restart gedit if it is open.")
 	echo -en "\033[22m"
 	exit 0
 
-elif [[ $1 == "desinstaller" ]]; then
+elif [[ $1 == "uninstall" ]]; then
 	echo -en "\033[1m"
 	echo -en "#########################\n##\n## "
-	echo $(gettext "Désinstallation de gedit-markdown")
+	echo $(gettext "Uninstall of gedit-markdown")
 	echo -e "##\n#########################\n"
-	echo -n $(gettext "Étape 1")
+	echo -n $(gettext "Step 1")
 	echo -n ": "
-	echo $(gettext "Suppression des fichiers")
+	echo $(gettext "Deleting files")
 	echo -en "\033[22m"
-	# Suppression des fichiers
+	# Deleting files
 	for i in "${ficSupp[@]}"; do
 		if [ -f $i ]; then
 			rm $i
@@ -135,24 +132,24 @@ elif [[ $1 == "desinstaller" ]]; then
 	
 	echo -en "\033[1m"
 	echo ""
-	echo -n $(gettext "Étape 2")
+	echo -n $(gettext "Step 2")
 	echo -n ": "
-	echo $(gettext "Mise à jour de la base de données MIME")
+	echo $(gettext "Update the MIME database")
 	echo -en "\033[22m"
-	# Mise à jour de la base de données MIME
+	# Update the MIME database
 	update-mime-database $rep_mime
 	redemarrer_nautilus
 	
 	echo -en "\033[1m"
 	echo ""
-	echo $(gettext "Désinstallation terminée. Veuillez redémarrer gedit s'il est ouvert.")
+	echo $(gettext "Uninstall complete. Please restart gedit if it is open.")
 	echo -en "\033[22m"
 	exit 0
 
 else
 	echo -en "\033[1m"
 	echo -n $(gettext "Usage")
-	echo ": $0 [installer | desinstaller]"
+	echo ": $0 [install | uninstall]"
 	echo -en "\033[22m"
 	exit 1
 fi
